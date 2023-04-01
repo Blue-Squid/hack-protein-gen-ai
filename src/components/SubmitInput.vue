@@ -61,11 +61,10 @@ export default {
             apiKey: this.apiKey,
           });
           const openai = new OpenAIApi(configuration);
-
+          this.sanitizeInputValue();
           await openai.createCompletion({
             model: 'text-davinci-003',
-            // prompt:  `Create the metadata, using datacite schema and xml format, of a dataset on the titled “${this.inputValue}” under a cc-by license and authored by Jon Doe`,
-            prompt: `Generate the DataCite XML metadata for a dataset with the title: ${this.inputValue}. The resource is CC-BY license. Do not include contributors.`,
+            prompt: this.generatePrompt(),
             max_tokens: 700,
             temperature: 1,
           }).then(gptResponse => {
@@ -100,6 +99,16 @@ export default {
         window.open(`${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`, '_blank').focus();
         // window.location.href = `${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`;
       }
+    },
+    generatePrompt() {
+      // const prompt = `Create the metadata, using datacite schema and xml format, of a dataset on the titled “${this.inputValue}” under a cc-by license and authored by Jon Doe`;
+      const prompt = `Create the metadata file, using DataCite schema and XML format, of a resource on the about a given TOPIC. 
+      The resource is under a cc-by license and is authored by Jon Doe. Include subjects. The subjects must use the FOS OECD subject scheme. Include a title and description. The type of resource is a dataset.
+      TOPIC: ${this.inputValue}`;
+      return prompt;
+    },
+    sanitizeInputValue() {
+      this.inputValue = this.inputValue.replace(/[^a-zA-Z0-9 ]/g, '');
     },
   },
 };
