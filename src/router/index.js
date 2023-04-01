@@ -1,13 +1,15 @@
 // src/router/index.js
 // import VueRouter from 'vue-router';
 import LoginPage from '@/components/LoginPage';
+import LandingPage from '@/components/LandingPage';
 import SubmitInput from '@/components/SubmitInput';
 import auth from '@/services/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 
 const routes = [
-  { path: '/', redirect: '/login' },
+  // { path: '/', redirect: '/login' },
+  { path: '/', component: LandingPage },
   { path: '/login', component: LoginPage },
   { path: '/submit', component: SubmitInput, meta: { requiresAuth: true } },
   // { path: '/submit', component: SubmitInput},
