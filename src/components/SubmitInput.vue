@@ -30,36 +30,33 @@ export default {
   data() {
     return {
       inputValue: '',
-      apiKey: "",
-      suffix: this.generatesuffix
+      apiKey: ""
     };
   },
   methods: {
     async submitInput() {
       try {
-        this.completion(this.inputValue)
-          .then(gptResponse => {
-            // wait 5 seconds
-            console.log('GPT response:', gptResponse);
+          const configuration = new Configuration({
+            apiKey: this.apiKey,
+          });
+          const openai = new OpenAIApi(configuration);
+
+          await openai.createCompletion({
+            model: 'text-davinci-003',
+            // prompt:  `Create the metadata, using datacite schema and xml format, of a dataset on the titled “${this.inputValue}” under a cc-by license and authored by Jon Doe`,
+            prompt: `Generate the DataCite XML metadata for a dataset with the title: ${this.inputValue}. The resource is CC-BY license. Do not include contributors.`,
+            max_tokens: 700,
+            temperature: 1,
+          }).then(gptResponse => {
+            console.log('GPT response:', gptResponse.data.choices[0].text.trim());
             const response = axios.post(`${API_URL}/dois`, {
-              data: this.payload(btoa(gptResponse)),
+              data: this.payload(btoa(gptResponse.data.choices[0].text.trim())),
             }, {
               headers: auth.getAuthHeader(),
-            })
-            // }).then(response => this.gotoFabrica(response));
+            }).then(response => this.gotoFabrica(response));
             console.log('Submission successful:', response.data);
             this.inputValue = '';
           })
-        // const processedText = gptResponse.data.processedText;
-        // console.log('GPT response:', auth.getAuthHeader());
-        // const response = await axios.post(`${API_URL}/dois`, {
-        //   data: this.payload(btoa(gptResponse)),
-        // }, {
-        //   headers: auth.getAuthHeader(),
-        // })
-        // }).then(response => this.gotoFabrica(response));
-
-        // console.log('Submission successful:', response.data);
         this.inputValue = '';
       } catch (error) {
         console.error('Submission failed:', error.message);
@@ -73,40 +70,15 @@ export default {
             prefix: '10.80225',
             source: 'fabricaGPT',
             state: "draft",
+            mode: "upload"
           },
       };
     },
     gotoFabrica(response) {
       if (response.status === 201) {
-        window.location.href = `${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`;
+        window.open(`${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`, '_blank').focus();
+        // window.location.href = `${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`;
       }
-    },
-    async completion (inputValue) {
-        try {
-        // Process the inputValue using OpenAI
-          const configuration = new Configuration({
-            apiKey: this.apiKey,
-          });
-          const openai = new OpenAIApi(configuration);
-          const response = await openai.createCompletion({
-            model: 'text-davinci-003',
-            prompt: `Generate the DataCite XML metadata for a dataset with the title: ${inputValue}. The resource is CC-BY license.`,
-            max_tokens: 700,
-            temperature: 1,
-          });
-
-          const processedText = response.choices[0].text.trim();
-          console.log(processedText);
-          processedText
-          // res.status(200).json({ processedText });
-          // generate a xml file in  string
-          // inputValue.trim() 
-
-          // "<?xml versiofsdfdsfdssdfdfsresource>".trim()
-        } catch (error) {
-          console.error('OpenAI processing failed:', error.message);
-          // res.status(500).json({ error: 'OpenAI processing failed' });
-        }
     },
   },
 };
