@@ -86,10 +86,10 @@ export default {
       return {
           type: 'dois',
           attributes: {
-            xml: xml,
-            prefix: '10.80225',
+            doi: `10.80225/${this.generateRandomString()}`,
             source: 'fabricaGPT',
             state: "draft",
+            xml: xml,
             mode: "upload"
           },
       };
@@ -103,12 +103,21 @@ export default {
     generatePrompt() {
       // const prompt = `Create the metadata, using datacite schema and xml format, of a dataset on the titled “${this.inputValue}” under a cc-by license and authored by Jon Doe`;
       const prompt = `Create the metadata file, using DataCite schema and XML format, of a resource on the about a given TOPIC. 
-      The resource is under a cc-by license and is authored by Jon Doe. Include subjects. The subjects must use the FOS OECD subject scheme. Include a title and description. The type of resource is a dataset.
+      The identifier MUST be empty. Do not include contributors. The resource is under a cc-by license and is authored by Jon Doe. Include subjects. The subjects must use the FOS OECD subject scheme. Include a title and description. The type of resource is a dataset.
       TOPIC: ${this.inputValue}`;
       return prompt;
     },
     sanitizeInputValue() {
       this.inputValue = this.inputValue.replace(/[^a-zA-Z0-9 ]/g, '');
+    },
+    generateRandomString() {
+      const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+      let randomString = '';
+      for (let i = 0; i < 10; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        randomString += characters.charAt(randomIndex);
+      }
+      return randomString;
     },
   },
 };
