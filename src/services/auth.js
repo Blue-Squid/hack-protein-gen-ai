@@ -35,4 +35,8 @@ export default {
     const user = JSON.parse(localStorage.getItem('user'));
     return user ? { 'Authorization': `Bearer ${user.access_token}` } : {};
   },
+  getToken() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user ? user.access_token : '';
+  }
 };
