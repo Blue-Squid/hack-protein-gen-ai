@@ -31,7 +31,7 @@
   </div>
 
   <div class="mt-6 flex items-center justify-end gap-x-6">
-    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
+    <button :disabled="isButtonDisabled"  type="submit" class="disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
   </div>
 </form>
 
@@ -53,6 +53,11 @@ export default {
       inputValue: '',
       apiKey: ""
     };
+  },
+  computed: {
+    isButtonDisabled() {
+      return this.inputValue.length === 0 || this.apiKey.length === 0 || !auth.isLoggedIn;
+    },
   },
   methods: {
     async submitInput() {
@@ -96,7 +101,7 @@ export default {
     },
     gotoFabrica(response) {
       if (response.status === 201) {
-        window.open(`${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`, '_blank').focus();
+        window.open(`${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit?jwt=${auth.getToken()}`, '_blank').focus();
         // window.location.href = `${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`;
       }
     },
