@@ -11,8 +11,7 @@ const routes = [
   // { path: '/', redirect: '/login' },
   { path: '/', component: LandingPage },
   { path: '/login', component: LoginPage },
-  { path: '/submit', component: SubmitInput, meta: { requiresAuth: true } },
-  // { path: '/submit', component: SubmitInput},
+  { path: '/submit', component: SubmitInput },
 ];
 
 const router = createRouter({

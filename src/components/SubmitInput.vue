@@ -42,6 +42,7 @@
 <script>
 import axios from 'axios';
 import auth from '@/services/auth';
+import 'helper/utils.js'
 const { Configuration, OpenAIApi } = require("openai");
 
 const API_URL = 'https://api.stage.datacite.org';
@@ -69,7 +70,7 @@ export default {
           this.sanitizeInputValue();
           await openai.createCompletion({
             model: 'text-davinci-003',
-            prompt: this.generatePrompt(),
+            prompt: this.generatePromptFromTitle(),
             max_tokens: 700,
             temperature: 1,
           }).then(gptResponse => {
@@ -105,12 +106,29 @@ export default {
         // window.location.href = `${FABRICA_URL}/dois/${encodeURIComponent(response.data.data.id)}/edit`;
       }
     },
-    generatePrompt() {
+    generatePromptFromTitle() {
       // const prompt = `Create the metadata, using datacite schema and xml format, of a dataset on the titled “${this.inputValue}” under a cc-by license and authored by Jon Doe`;
       const prompt = `Create the metadata file, using DataCite schema and XML format, of a resource on the about a given TOPIC. 
       The identifier MUST be empty. Do not include contributors. The resource is under a cc-by license and is authored by Jon Doe. Include subjects. The subjects must use the FOS OECD subject scheme. Include a title and description. The type of resource is a dataset.
       TOPIC: ${this.inputValue}`;
       return prompt;
+    },
+    generatePromptFromUrl() {
+      // const prompt = `Create the metadata, using datacite schema and xml format, of a dataset on the titled “${this.inputValue}” under a cc-by license and authored by Jon Doe`;
+      const prompt = `Create the metadata file, using DataCite schema and XML format, of a resource with a given METADATA. 
+      ## METADATA 
+      ${this.getMetadata(this.inputValue)}`;
+      return prompt;
+    },
+    getMetadata(url) {
+       axios.get(url, {
+        headers: auth.getAuthHeader(),
+      }).then(response => {
+        console.log('Submission successful');
+        return response.data;
+      }).catch(error => {
+        console.error('Submission failed:', error.message);
+      });
     },
     sanitizeInputValue() {
       this.inputValue = this.inputValue.replace(/[^a-zA-Z0-9 ]/g, '');
