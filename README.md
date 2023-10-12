@@ -1,5 +1,12 @@
 # Protein-Gen-AI
 
+## Run with Docker 
+```
+docker-compose up --build
+
+https://localhost:8080
+```
+
 ## Project setup
 ```
 npm install
