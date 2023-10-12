@@ -1,5 +1,5 @@
 {
-  "name": "fabrica-gpt",
+  "name": "hack-ai-protein-gen-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -48,6 +48,6 @@
     "not dead",
     "not ie 11"
   ],
-  "_id": "fabrica-gpt@0.1.0",
+  "_id": "hack-ai-protein-gen-ai@0.1.0",
   "readme": "ERROR: No README data found!"
 }
