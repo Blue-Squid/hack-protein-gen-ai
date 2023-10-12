@@ -42,7 +42,7 @@
 <script>
 import axios from 'axios';
 import auth from '@/services/auth';
-import 'helper/utils.js'
+// import 'helper/utils.js'
 const { Configuration, OpenAIApi } = require("openai");
 
 const API_URL = 'https://api.stage.datacite.org';
