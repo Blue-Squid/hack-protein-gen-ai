@@ -3,6 +3,14 @@ const webpack = require("webpack");
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  devServer: {
+    proxy: {
+      '/config': {
+        target: 'https://merle-protein-generator.hf.space',
+        changeOrigin: true,
+      },
+    },
+  },
   configureWebpack: {
     resolve: {
       fallback: {
