@@ -11,7 +11,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   // { path: '/', redirect: '/login' },
   { path: '/', component: LandingPage },
-  { path: '/upload', component: ProteinForm },
+  { path: '/protein', component: ProteinForm },
   { path: '/login', component: LoginPage },
   { path: '/submit', component: SubmitInput },
 ];

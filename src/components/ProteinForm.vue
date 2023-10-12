@@ -1,6 +1,9 @@
 <template>
+  <PageHeader/>
+  
   <div class="p-4 space-y-6 bg-white shadow-md rounded-md">
     <!-- Inputs Section -->
+    
     <div>
       <h2 class="text-lg font-semibold">INPUTS</h2>
       <div class="space-y-4">
@@ -59,9 +62,12 @@
 <script>
 import axios from 'axios';
 import { client } from "@gradio/client";
-
+import PageHeader from '@/components/PageHeader'
 
 export default {
+  components: {
+    'PageHeader': PageHeader,
+  },
   data() {
     return {
       helixBias: 0,
