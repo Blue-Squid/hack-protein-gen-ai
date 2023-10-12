@@ -3,6 +3,7 @@
 import LoginPage from '@/components/LoginPage';
 import LandingPage from '@/components/LandingPage';
 import SubmitInput from '@/components/SubmitInput';
+import ProteinForm from '@/components/ProteinForm'
 import auth from '@/services/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -10,6 +11,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   // { path: '/', redirect: '/login' },
   { path: '/', component: LandingPage },
+  { path: '/upload', component: ProteinForm },
   { path: '/login', component: LoginPage },
   { path: '/submit', component: SubmitInput },
 ];
