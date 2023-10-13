@@ -63,10 +63,11 @@
 import axios from 'axios';
 import { client } from "@gradio/client";
 import PageHeader from '@/components/PageHeader'
+import vertex from '@/services/vertex';
 
 export default {
   components: {
-    'PageHeader': PageHeader,
+    'PageHeader': PageHeader
   },
   data() {
     return {
@@ -74,7 +75,7 @@ export default {
       strandBias: 0,
       loopBias: 0,
       customSequence: '',
-       apiResponse: ''
+      apiResponse: ''
     };
   },
   methods: {
@@ -106,6 +107,16 @@ export default {
       } catch (error) {
         console.error("Error making API call:", error);
       }
+    },
+    async vertexModel(){
+      const payload = {
+          helixBias: this.helixBias,
+          strandBias: this.strandBias,
+          loopBias: this.loopBias,
+          customSequence: this.customSequence
+        }
+      const response = await vertex.runModel(payload);
+      console.log(response.data);
     }
   }
 };
